@@ -5,36 +5,23 @@
       {{cadastro?.qtdAcao== null ? 0 : cadastro.qtdAcao}} de ações compradas.
       E você está no momento {{cadastro?.qtdAcao == null ? 0 : cadastro.momento}}.
       <span *ngIf="ativo !== undefined">
-        O valor atual da Ação da <strong style=" text-transform: uppercase;">{{qualAtivo}}</strong> de acordo com a <strong>LSTM</strong> é de {{ativo[0].valor | currency : 'BRL'}}, e o valor a 100 momentos futuros é de
+        O valor atual da Ação da <strong style=" text-transform: uppercase;">{{qualAtivo}}</strong> de acordo com a
+        <strong>LSTM</strong> é de {{ativo[0].valor | currency : 'BRL'}}, e o valor a 100 momentos futuros é de
         {{ativo[1].valor | currency : 'BRL'}}.
-        O valor atual da Ação da <strong style=" text-transform: uppercase;">{{qualAtivo}}</strong> <strong> REAL</strong> é de {{ativo2[0].valor | currency : 'BRL'}} e o valor a 100 momentos futuros é de
+        O valor atual da Ação da <strong style=" text-transform: uppercase;">{{qualAtivo}}</strong> <strong>
+          REAL</strong> é de {{ativo2[0].valor | currency : 'BRL'}} e o valor a 100 momentos futuros é de
         {{ativo2[1].valor | currency : 'BRL'}}.
       </span>
 
     </div>
     <div class="col-md-8">
-      <!-- <div class="chart-wrapper">
-        <canvas baseChart
-        [datasets]="lineChartData"
-        [labels]="lineChartLabels"
-        [options]="lineChartOptions"
-        [colors]="lineChartColors"
-        [legend]="lineChartLegend"
-        [chartType]="lineChartType"
-        [plugins]="lineChartPlugins">
-        </canvas> -->
-      <!-- </div> -->
 
-      <!-- <div>
-        <canvas #meuCanvas></canvas>
-
-      </div> -->
 
       <iframe width="720" height="430"
         src="https://app.powerbi.com/reportEmbed?reportId=4ca457bb-eb74-45bb-ab0a-fc9f28e008a5&autoAuth=true&ctid=73319f42-8908-4b89-9f8d-558cf4d5d776&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLWJyYXppbC1zb3V0aC1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D"
         frameborder="0" allowFullScreen="true"></iframe>
 
-      <p style="text-align: center;">Grafico</p>
+      <p style="text-align: center;">Gráfico</p>
       <p style="text-align: center; background-color: bisque;">INDICATIVO DA REDE: {{indicativo}}</p>
     </div>
   </div>

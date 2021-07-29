@@ -1,0 +1,31 @@
+<table class="table table-striped">
+  <thead>
+    <th scope="col">ID</th>
+    <th scope="col">createDate</th>
+    <th scope="col">updateDate</th>
+    <th scope="col">Nome</th>
+    <th scope="col">email</th>
+    <th scope="col">senha</th>
+  </thead>
+  <tbody *ngIf="cadastros?.length > 0 ;else listaVazia">
+    <tr scope="row"  *ngFor="let cadastro of cadastros">
+      <td>{{cadastro.id}}</td>
+      <td>{{cadastro.createDate | date: "short"}}</td>
+      <td>{{cadastro.updateDate | date: "short"}}</td>
+      <td>{{cadastro.nome}}</td>
+      <td>{{cadastro.email}}</td>
+      <td>{{cadastro.password}}</td>
+    </tr>
+  </tbody>
+</table>
+<ng-template #listaVazia class="trindade">
+  <p>Nenhuma Operacao cadastrada</p>
+</ng-template>
+
+<!-- <div *ngFor="let cadastro of cadastros">
+  <p>First Name: {{cadastro.firstName}}</p>
+  <p>LastName: {{cadastro.lastName}}</p>
+  <p>Email: {{cadastro.email}}</p>
+  <p>Password: {{cadastro.password}}</p>
+  <p>Data: {{cadastro.data}}</p>
+</div> -->

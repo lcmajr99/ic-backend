@@ -1,0 +1,172 @@
+<div class="container" style="margin-top: 40px;">
+  <div class="row" style="justify-content: space-between;">
+    <div class="col-md-4" style="text-align: justify;">
+      Olá <strong>{{cadastro?.nome}}</strong>, você atualmente possui {{cadastro?.saldo | currency : 'BRL'}} de saldo, e
+      {{cadastro?.qtdAcao== null ? 0 : cadastro.qtdAcao}} de ações compradas.
+      E você está no momento {{cadastro?.qtdAcao == null ? 0 : cadastro.momento}}.
+      <span *ngIf="ativo !== undefined">
+        O valor atual da Ação da <strong style=" text-transform: uppercase;">{{qualAtivo}}</strong> de acordo com a <strong>LSTM</strong> é de {{ativo[0].valor | currency : 'BRL'}}, e o valor a 100 momentos futuros é de
+        {{ativo[1].valor | currency : 'BRL'}}.
+        O valor atual da Ação da <strong style=" text-transform: uppercase;">{{qualAtivo}}</strong> <strong> REAL</strong> é de {{ativo2[0].valor | currency : 'BRL'}} e o valor a 100 momentos futuros é de
+        {{ativo2[1].valor | currency : 'BRL'}}.
+      </span>
+
+    </div>
+    <div class="col-md-8">
+      <!-- <div class="chart-wrapper">
+        <canvas baseChart
+        [datasets]="lineChartData"
+        [labels]="lineChartLabels"
+        [options]="lineChartOptions"
+        [colors]="lineChartColors"
+        [legend]="lineChartLegend"
+        [chartType]="lineChartType"
+        [plugins]="lineChartPlugins">
+        </canvas> -->
+      <!-- </div> -->
+
+      <!-- <div>
+        <canvas #meuCanvas></canvas>
+
+      </div> -->
+
+      <iframe width="720" height="430"
+        src="https://app.powerbi.com/reportEmbed?reportId=4ca457bb-eb74-45bb-ab0a-fc9f28e008a5&autoAuth=true&ctid=73319f42-8908-4b89-9f8d-558cf4d5d776&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLWJyYXppbC1zb3V0aC1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D"
+        frameborder="0" allowFullScreen="true"></iframe>
+
+      <p style="text-align: center;">Grafico</p>
+      <p style="text-align: center; background-color: bisque;">INDICATIVO DA REDE: {{indicativo}}</p>
+    </div>
+  </div>
+  <div
+    style="display: flex; align-items: center; justify-content: center; margin-top: 60px; margin-bottom: 60px; background-color: rgb(211, 226, 215);">
+    NOVA
+    TRANSAÇÃO
+  </div>
+  <div
+    style="margin-bottom: 90px; padding-left: 30px; padding-top: 15px;  background-color: rgb(224, 222, 222); border-radius: 10px;">
+    <div class="row">
+      <form (ngSubmit)="operar()" class="col">
+        <div class="col-md-4" style="width: 100%;">
+          <p style="text-align: center; width: 100%;">Realizar transação</p>
+        </div>
+        <div class="col-md-4">
+          <label for="tipo" class="form-label">Tipo transação</label>
+          <select class="form-select" aria-label="Default select example" [(ngModel)]="tipo" id="tipo" name="tipo">
+            <option value="COMPRA">COMPRA</option>
+            <option value="VENDA"> VENDA</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="quantidade" class="form-label">Quantidade</label>
+          <input type="number" class="form-control" id="quantidade" placeholder="Quantidade" [(ngModel)]="quantidade"
+            name="quantidade">
+        </div>
+        <button type="submit" class="btn btn-primary col-md-2"
+          style=" width: 80%; margin-top: 30px; margin-bottom: 30px;">Efetuar
+          transação
+        </button>
+      </form>
+      <form (ngSubmit)="mudarTempo()" class="col" style="border-left: 3px solid gray; margin-bottom: auto;">
+        <div class="col-md-4" style="width: 100%;">
+          <p style="text-align: center;">Alterar Momento</p>
+        </div>
+        <div class="col-md-4">
+          <label for="momento" class="form-label">Avançar ao Momento:</label>
+          <input type="number" class="form-control" id="momento" placeholder="Momento" min="0" max="{{maxMomento}}"
+            [(ngModel)]="momento" name="momento">
+        </div>
+        <button type="submit" class="btn btn-primary col-md-2"
+          style=" width: 80%; margin-top: 50px; margin-bottom: 30px;">Efetuar
+          mudança temporal
+        </button>
+      </form>
+    </div>
+  </div>
+  <form (ngSubmit)="buscaResultado()">
+    <div class="row justify-content-center" style="margin-top: -50px; margin-bottom: 50px;">
+      <button class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Exibir
+        Resultados</button>
+    </div>
+  </form>
+</div>
+<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+  tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalToggleLabel">Resultados</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom: 50px;">
+          Olá <strong>{{cadastro?.nome}}</strong>, segue algumas informações abaixo.
+        </div>
+        <table class="table table-striped">
+          <thead>
+            <th scope="col">Qtd de operação (OP)</th>
+            <th scope="col">Qtd de OP do tipo Venda</th>
+            <th scope="col">Qtd de OP do tipo Compra</th>
+            <th scope="col">Qtd de Ação</th>
+            <th scope="col">Dinheiro Inicial</th>
+            <th scope="col">Dinheiro atual</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td *ngIf="qtdTransacao !== undefined">{{qtdTransacao[0]}}</td>
+              <td *ngIf="qtdTransacao !== undefined">{{qtdTransacao[2]}}</td>
+              <td *ngIf="qtdTransacao !== undefined">{{qtdTransacao[1]}}</td>
+              <td>{{cadastro?.qtdAcao}}</td>
+              <td>{{ 1000 | currency : 'BRL'}}</td>
+              <td>{{cadastro?.saldo | currency : 'BRL'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <form (ngSubmit)="buscaMaisInformacao()">
+          <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal"
+            data-bs-dismiss="modal">Mais Detalhes</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+  tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalToggleLabel2">Resultados</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+            <th scope="col">Qtd de Ação</th>
+            <th scope="col">Dinheiro Inicial</th>
+            <th scope="col">Dinheiro atual</th>
+            <th scope="col">Valor Investido de acordo com a cotação atual</th>
+            <th scope="col">Valor se você vender todas as suas ações <strong>(REAL)</strong></th>
+            <th scope="col">Valor se você vender todas as suas ações <strong>(LSTM)</strong></th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{cadastro?.qtdAcao}}</td>
+              <td>{{ 1000 | currency : 'BRL'}}</td>
+              <td>{{cadastro?.saldo | currency : 'BRL'}}</td>
+              <td>{{maisResultado | currency : 'BRL'}}</td>
+              <td>{{vendeTudo | currency : 'BRL'}}</td>
+              <td>{{vendeTudo2 | currency : 'BRL'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
+          data-bs-dismiss="modal">Voltar a página anterior</button>
+      </div>
+    </div>
+  </div>
+</div>

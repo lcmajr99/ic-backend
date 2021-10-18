@@ -5,6 +5,8 @@ export interface Transacao{
   valor: Number;
   tipo: String;
   quantidade: Number;
+  qualAtivo: String;
   usuario: Usuario;
+
 
 }

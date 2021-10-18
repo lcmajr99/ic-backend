@@ -5,5 +5,7 @@ export interface Usuario{
   email: String;
   momento: number;
   qtdAcao: number;
+  qtdAcaoBBAS3: number;
+  qtdAcaoPETR4: number;
   saldo?: number;
 }

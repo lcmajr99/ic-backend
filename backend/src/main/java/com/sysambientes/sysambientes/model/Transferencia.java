@@ -28,6 +28,9 @@ public class Transferencia extends EntityBase implements Serializable {
 	@Column(name = "quantidade")
 	private Integer quantidade;
 
+	@Column(name = "qualAtivo")
+	private String qualAtivo;
+
 
 //________________________________
 

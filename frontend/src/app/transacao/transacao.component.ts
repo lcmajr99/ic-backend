@@ -84,12 +84,15 @@ export class TransacaoComponent implements OnInit {
       valor: this.ativo[0].valor,
       tipo: this.tipo,
       quantidade: this.quantidade,
+      qualAtivo: this.qualAtivo,
       usuario: this.cadastro,
     };
+    console.log(valorEmitir);
+
     this.service2.efetuar(valorEmitir).subscribe(
       (resultado) => {
         alert('Transação efetuado com sucesso');
-        document.location.reload(true);
+        document.location.reload();
 
         this.limparCampos();
       },
@@ -105,6 +108,8 @@ export class TransacaoComponent implements OnInit {
       nome: this.cadastro.nome,
       email: this.cadastro.email,
       qtdAcao: this.cadastro.qtdAcao,
+      qtdAcaoBBAS3: this.cadastro.qtdAcaoBBAS3,
+      qtdAcaoPETR4: this.cadastro.qtdAcaoPETR4,
       momento: this.momento,
       saldo: this.cadastro.saldo,
     };
@@ -118,7 +123,7 @@ export class TransacaoComponent implements OnInit {
           (resultado) => {
             alert('Mudança temporal efetuada com sucesso');
             this.momento = 0;
-            document.location.reload(true);
+            document.location.reload();
           },
           (error) => {
             alert('Erro ao efetuar mudança temporal');
@@ -184,6 +189,9 @@ export class TransacaoComponent implements OnInit {
         this.ativo = ativos;
         this.criaAlerta(ativos);
       });
+      this.service3.valorRealBBAS3(momento).subscribe((ativos: Ativo[]) => {
+        this.ativo2 = ativos;
+      });
     }
     else{
       if(this.qualAtivo == 'petr4'){
@@ -191,12 +199,13 @@ export class TransacaoComponent implements OnInit {
           this.ativo = ativos;
           this.criaAlerta(ativos);
         });
+        this.service3.valorReal(momento).subscribe((ativos: Ativo[]) => {
+          this.ativo2 = ativos;
+        });
+
       }
     }
-    this.service3.valorReal(momento).subscribe((ativos: Ativo[]) => {
 
-      this.ativo2 = ativos;
-    });
   }
 
   buscaResultado() {
@@ -251,5 +260,6 @@ export class TransacaoComponent implements OnInit {
     this.service3.todas().subscribe((ativos: Ativo[]) => {
       this.maxMomento = ativos.length;
     });
+
   }
 }

@@ -19,6 +19,7 @@ public class Usuario extends EntityBase implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+
 	@Column(name = "nome")
 	private String nome;
 
@@ -39,6 +40,15 @@ public class Usuario extends EntityBase implements Serializable {
 
 	@Column(name = "qtdAcao")
 	private Integer qtdAcao;
+
+	@Column(name = "qtdAcaoBBAS3")
+	private Integer qtdAcaoBBAS3;
+
+	@Column(name = "status")
+	private String status;
+
+	@Column(name = "qtdAcaoPETR4")
+	private Integer qtdAcaoPETR4;
 //________________________________
 
 // RELACIONAMENTOS

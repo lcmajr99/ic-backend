@@ -1,10 +1,7 @@
 package com.sysambientes.sysambientes.controller;
 
 import com.sysambientes.sysambientes.model.*;
-import com.sysambientes.sysambientes.services.AtivosServicePETR4;
-import com.sysambientes.sysambientes.services.AtivosServicePETR4Previsao;
-import com.sysambientes.sysambientes.services.TransferenciaService;
-import com.sysambientes.sysambientes.services.UsuarioService;
+import com.sysambientes.sysambientes.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +28,12 @@ public class TransferenciaController {
 	@Autowired
 	private AtivosServicePETR4Previsao ativosServicePETR4Previsao;
 
+	@Autowired
+	private AtivosServiceBBAS3 ativosServiceBBAS3;
+
+	@Autowired
+	private AtivosServiceBBAS3Previsao ativosServiceBBAS3Previsao;
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> findById(@PathVariable Integer id) {
 		Transferencia transferencia = transferenciaService.findById(id);
@@ -51,16 +54,35 @@ public class TransferenciaController {
 
 		//Manipular usuario
 		Tipo tipo = Tipo.COMPRA;
-		if(transferencia.getTipo() == tipo){
-			Float aux = transferencia.getValor() * transferencia.getQuantidade();
-			usuarioAux.setSaldo(usuarioAux.getSaldo()-aux);
-			usuarioAux.setQtdAcao(usuarioAux.getQtdAcao()+ transferencia.getQuantidade());
-			usuarioService.update(usuarioAux);
+		if(transferencia.getTipo() == tipo ){
+			if(transferencia.getQualAtivo().equals("petr4")) {
+				Float aux = transferencia.getValor() * transferencia.getQuantidade();
+				usuarioAux.setSaldo(usuarioAux.getSaldo() - aux);
+				usuarioAux.setQtdAcao(usuarioAux.getQtdAcao() + transferencia.getQuantidade());
+				usuarioAux.setQtdAcaoPETR4(usuarioAux.getQtdAcaoPETR4() + transferencia.getQuantidade());
+				usuarioService.update(usuarioAux);
+			}else{
+				Float aux = transferencia.getValor() * transferencia.getQuantidade();
+				usuarioAux.setSaldo(usuarioAux.getSaldo() - aux);
+				usuarioAux.setQtdAcao(usuarioAux.getQtdAcao() + transferencia.getQuantidade());
+				usuarioAux.setQtdAcaoBBAS3(usuarioAux.getQtdAcaoBBAS3() + transferencia.getQuantidade());
+				usuarioService.update(usuarioAux);
+			}
 		}else{
-			Float aux = transferencia.getValor() * transferencia.getQuantidade();
-			usuarioAux.setSaldo(usuarioAux.getSaldo()+aux);
-			usuarioAux.setQtdAcao(usuarioAux.getQtdAcao() - transferencia.getQuantidade());
-			usuarioService.update(usuarioAux);
+			if(transferencia.getQualAtivo().equals("petr4")){
+				Float aux = transferencia.getValor() * transferencia.getQuantidade();
+				usuarioAux.setSaldo(usuarioAux.getSaldo()+aux);
+				usuarioAux.setQtdAcao(usuarioAux.getQtdAcao() - transferencia.getQuantidade());
+				usuarioAux.setQtdAcaoPETR4(usuarioAux.getQtdAcaoPETR4() - transferencia.getQuantidade());
+				usuarioService.update(usuarioAux);
+			}else{
+				Float aux = transferencia.getValor() * transferencia.getQuantidade();
+				usuarioAux.setSaldo(usuarioAux.getSaldo()+aux);
+				usuarioAux.setQtdAcao(usuarioAux.getQtdAcao() - transferencia.getQuantidade());
+				usuarioAux.setQtdAcaoBBAS3(usuarioAux.getQtdAcaoBBAS3() - transferencia.getQuantidade());
+				usuarioService.update(usuarioAux);
+			}
+
 		}
 
 
@@ -76,7 +98,8 @@ public class TransferenciaController {
 	public ResponseEntity<Float> jogo2(@PathVariable Integer id){
 		Usuario usuarioAux = usuarioService.findById(id);
 		AtivosPETR4 ativosPETR4 = ativosServicePETR4.findById(usuarioAux.getMomento());
-		Float aux = new Float((usuarioAux.getQtdAcao() * ativosPETR4.getValor()));
+		AtivosBBAS3 ativosBBAS3 = ativosServiceBBAS3.findById(usuarioAux.getMomento());
+		Float aux = new Float((usuarioAux.getQtdAcaoPETR4() * ativosPETR4.getValor() + usuarioAux.getQtdAcaoBBAS3() * ativosBBAS3.getValor()));
 
 		return new ResponseEntity<>(aux, HttpStatus.OK);
 	}
@@ -84,7 +107,9 @@ public class TransferenciaController {
 	public ResponseEntity<Float> jogo3(@PathVariable Integer id){
 		Usuario usuarioAux = usuarioService.findById(id);
 		AtivosPETR4Previsao ativosPETR4Previsao = ativosServicePETR4Previsao.findById(usuarioAux.getMomento());
-		Float aux = new Float((usuarioAux.getQtdAcao() * ativosPETR4Previsao.getValor()));
+		AtivosBBAS3Previsao ativosBBAS3Previsao = ativosServiceBBAS3Previsao.findById(usuarioAux.getMomento());
+
+		Float aux = new Float((usuarioAux.getQtdAcaoPETR4() * ativosPETR4Previsao.getValor() + usuarioAux.getQtdAcaoBBAS3() * ativosBBAS3Previsao.getValor()));
 
 		return new ResponseEntity<>(aux, HttpStatus.OK);
 	}

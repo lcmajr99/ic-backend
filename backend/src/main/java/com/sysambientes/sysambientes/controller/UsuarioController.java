@@ -53,6 +53,8 @@ public class UsuarioController {
 	public ResponseEntity<Void> create(@RequestBody Usuario usuario) {
 		usuario.setSaldo(new Float(1000.0));
 		usuario.setQtdAcao(0);
+		usuario.setQtdAcaoPETR4(0);
+		usuario.setQtdAcaoBBAS3(0);
 		usuario.setMomento(1);
 		usuario = usuarioService.create(usuario);
 		return ResponseEntity.noContent().build();

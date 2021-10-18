@@ -1,9 +1,7 @@
 package com.sysambientes.sysambientes.services;
 
 import com.sysambientes.sysambientes.model.AtivosBBAS3;
-import com.sysambientes.sysambientes.model.AtivosPETR4;
 import com.sysambientes.sysambientes.repository.AtivoBBAS3Repository;
-import com.sysambientes.sysambientes.repository.AtivoPETR4Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

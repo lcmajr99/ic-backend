@@ -1,7 +1,6 @@
 package com.sysambientes.sysambientes.services;
 
 import com.sysambientes.sysambientes.model.AtivosPETR4;
-import com.sysambientes.sysambientes.repository.AtivoBBAS3Repository;
 import com.sysambientes.sysambientes.repository.AtivoPETR4Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +34,11 @@ public class AtivosServicePETR4 {
 	public AtivosPETR4 findById(Integer id) {
 		Optional<AtivosPETR4> ativosOpt = ativoRepository.findById(id);
 		return ativosOpt.orElse(null);
+	}
+
+	public AtivosPETR4 TESTE(Integer id) {
+		AtivosPETR4 ativosOpt = ativoRepository.qtdTransacao(id);
+		return ativosOpt;
 	}
 	
 	public List<AtivosPETR4> findAll() {

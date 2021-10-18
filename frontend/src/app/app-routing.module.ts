@@ -1,3 +1,4 @@
+import { TutorialComponent } from './tutorial/tutorial.component';
 import { AtivosComponent } from './ativos/ativos.component';
 import { LoginComponent } from './login/login.component';
 import { ExtratoComponent } from './extrato/extrato.component';
@@ -26,6 +27,9 @@ export const routes: Routes = [
   },
   {
     path: 'transacao', component: TransacaoComponent
+  },
+  {
+    path: 'tutorial', component: TutorialComponent
   }
 ]
 

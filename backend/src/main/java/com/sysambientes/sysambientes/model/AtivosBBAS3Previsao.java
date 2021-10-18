@@ -8,11 +8,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "ativos_petr4_previsao")
+@Table(name = "ativos_bbas3_previsao")
 @Data
 @EqualsAndHashCode()
-public class AtivosPETR4Previsao  implements Serializable {
-
+public class AtivosBBAS3Previsao  implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)

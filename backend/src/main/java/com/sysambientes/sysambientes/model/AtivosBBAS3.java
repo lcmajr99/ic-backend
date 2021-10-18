@@ -3,18 +3,19 @@ package com.sysambientes.sysambientes.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "ativos_bbas3")
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class AtivosBBAS3 extends EntityBase implements Serializable {
+@EqualsAndHashCode()
+public class AtivosBBAS3 implements Serializable {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private int id;
 
 	@Column(name = "horario")
 	private String horario;
